@@ -141,7 +141,7 @@ impl TimestepEmbedder {
     }
 
     fn timestep_embedding(t: &Tensor, dim: usize, max_period: f64) -> Result<Tensor> {
-        if !dim.is_multiple_of(2) {
+        if dim % 2 != 0 {
             bail!("Embedding dimension must be even")
         }
 

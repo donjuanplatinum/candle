@@ -328,7 +328,7 @@ impl DebertaV2DisentangledSelfAttention {
 
         if !config
             .hidden_size
-            .is_multiple_of(config.num_attention_heads)
+            % config.num_attention_heads == 0
         {
             return Err(candle::Error::Msg(format!(
                 "The hidden size {} is not a multiple of the number of attention heads {}",

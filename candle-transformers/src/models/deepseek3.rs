@@ -7,8 +7,8 @@ use candle::{
     Tensor, WithDType, D,
 };
 use candle_nn::{embedding, rms_norm, Activation, Embedding, Linear, Module, RmsNorm, VarBuilder};
-use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use serde::Deserialize;
+use crate::serde_default_fn;
 
 struct NonZero {}
 
@@ -145,38 +145,22 @@ pub trait BincountOp {
 }
 
 fn bincount(values: &[u32], minlength: u32) -> Vec<u32> {
-    // Find the maximum value in `values` (or zero if empty)
-    let max_val = values.par_iter().max().copied().unwrap_or(0);
+    // Sequential implementation without rayon
+    let mut max_val: u32 = 0;
+    for &v in values {
+        if v > max_val {
+            max_val = v;
+        }
+    }
 
-    // The final size of the bin counts must be at least `minlength`
-    // and large enough to include the largest value in `values`.
-    let result_len = (max_val + 1).max(minlength);
-
-    // Each thread creates a local histogram (`fold`),
-    // and then they are merged together (`reduce`).
-    values
-        .par_iter()
-        .fold(
-            // Create a local histogram
-            || vec![0u32; result_len as usize],
-            // Update the local histogram
-            |mut local_counts, &val| {
-                local_counts[val as usize] += 1;
-                local_counts
-            },
-        )
-        // Merge histograms from all threads
-        .reduce(
-            // Identity (empty histogram)
-            || vec![0u32; result_len as usize],
-            // Combine two histograms
-            |mut global_counts, local_counts| {
-                for (g, l) in global_counts.iter_mut().zip(local_counts) {
-                    *g += l;
-                }
-                global_counts
-            },
-        )
+    let result_len = (max_val + 1).max(minlength) as usize;
+    let mut counts = vec![0u32; result_len];
+    for &v in values {
+        let idx = v as usize;
+        // Safety: idx < result_len by construction
+        counts[idx] = counts[idx].saturating_add(1);
+    }
+    counts
 }
 
 impl BincountOp for Tensor {
@@ -897,7 +881,7 @@ impl DecoderLayer {
         )?;
         let moe_or_mlp = if cfg.n_routed_experts.is_some()
             && layer_idx >= cfg.first_k_dense_replace
-            && layer_idx.is_multiple_of(cfg.moe_layer_freq)
+            && layer_idx % cfg.moe_layer_freq == 0
         {
             MoeOrMlp::Moe(
                 Moe::new(

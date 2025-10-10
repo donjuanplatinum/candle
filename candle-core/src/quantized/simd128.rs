@@ -7,7 +7,7 @@ use core::arch::wasm32::*;
 #[inline(always)]
 pub(crate) fn vec_dot_q4_0_q8_0(n: usize, xs: &[BlockQ4_0], ys: &[BlockQ8_0]) -> f32 {
     debug_assert!(
-        n.is_multiple_of(QK8_0),
+        n % QK8_0 == 0,
         "vec_dot_q4_0_q8_0: {n} is not divisible by {QK8_0}"
     );
     unsafe {
@@ -53,7 +53,7 @@ pub(crate) fn vec_dot_q4_0_q8_0(n: usize, xs: &[BlockQ4_0], ys: &[BlockQ8_0]) ->
 #[inline(always)]
 pub(crate) fn vec_dot_q8_0_q8_0(n: usize, xs: &[BlockQ8_0], ys: &[BlockQ8_0]) -> f32 {
     debug_assert!(
-        n.is_multiple_of(QK8_0),
+        n % QK8_0 == 0,
         "vec_dot_q8_0_q8_0: {n} is not divisible by {QK8_0}"
     );
     unsafe {
@@ -391,7 +391,7 @@ pub(crate) fn vec_dot_q6k_q8k(n: usize, xs: &[BlockQ6K], ys: &[BlockQ8K]) -> f32
 #[inline(always)]
 pub(crate) fn vec_dot_q8k_q8k(n: usize, xs: &[BlockQ8K], ys: &[BlockQ8K]) -> f32 {
     debug_assert!(
-        n.is_multiple_of(QK_K),
+        n % QK_K == 0,
         "vec_dot_q8k_q8k: {n} is not divisible by {QK_K}"
     );
     unsafe {

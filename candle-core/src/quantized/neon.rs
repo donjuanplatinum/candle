@@ -22,7 +22,7 @@ unsafe fn vdotq_s32(a: int8x16_t, b: int8x16_t) -> int32x4_t {
 #[inline(always)]
 pub(crate) fn vec_dot_q4_0_q8_0(n: usize, xs: &[BlockQ4_0], ys: &[BlockQ8_0]) -> f32 {
     debug_assert!(
-        n.is_multiple_of(QK8_0),
+        n % QK8_0 == 0,
         "vec_dot_q4_0_q8_0: {n} is not divisible by {QK8_0}"
     );
     let nb = n / QK8_0;
@@ -64,7 +64,7 @@ pub(crate) fn vec_dot_q4_0_q8_0(n: usize, xs: &[BlockQ4_0], ys: &[BlockQ8_0]) ->
 #[inline(always)]
 pub(crate) fn vec_dot_q8_0_q8_0(n: usize, xs: &[BlockQ8_0], ys: &[BlockQ8_0]) -> f32 {
     debug_assert!(
-        n.is_multiple_of(QK8_0),
+        n % QK8_0 == 0,
         "vec_dot_q8_0_q8_0: {n} is not divisible by {QK8_0}"
     );
     let nb = n / QK8_0;
@@ -97,7 +97,7 @@ pub(crate) fn vec_dot_q8_0_q8_0(n: usize, xs: &[BlockQ8_0], ys: &[BlockQ8_0]) ->
 #[inline(always)]
 pub(crate) fn vec_dot_q8k_q8k(n: usize, xs: &[BlockQ8K], ys: &[BlockQ8K]) -> f32 {
     debug_assert!(
-        n.is_multiple_of(QK_K),
+        n % QK_K == 0,
         "vec_dot_q8k_q8k: {n} is not divisible by {QK_K}"
     );
     let mut sumf = 0f32;
@@ -122,7 +122,7 @@ pub(crate) fn vec_dot_q8k_q8k(n: usize, xs: &[BlockQ8K], ys: &[BlockQ8K]) -> f32
 #[inline(always)]
 pub(crate) fn vec_dot_q6k_q8k(n: usize, xs: &[BlockQ6K], ys: &[BlockQ8K]) -> f32 {
     debug_assert!(
-        n.is_multiple_of(QK_K),
+        n % QK_K == 0,
         "vec_dot_q6k_q8k: {n} is not divisible by {QK_K}"
     );
     let mut sum = 0f32;
@@ -231,7 +231,7 @@ pub(crate) fn vec_dot_q6k_q8k(n: usize, xs: &[BlockQ6K], ys: &[BlockQ8K]) -> f32
 #[inline(always)]
 pub(crate) fn vec_dot_q5k_q8k(n: usize, xs: &[BlockQ5K], ys: &[BlockQ8K]) -> f32 {
     debug_assert!(
-        n.is_multiple_of(QK_K),
+        n % QK_K == 0,
         "vec_dot_q5k_q8k: {n} is not divisible by {QK_K}"
     );
     let mut sumf = 0f32;
@@ -316,7 +316,7 @@ pub(crate) fn vec_dot_q5k_q8k(n: usize, xs: &[BlockQ5K], ys: &[BlockQ8K]) -> f32
 #[inline(always)]
 pub(crate) fn vec_dot_q4k_q8k(n: usize, xs: &[BlockQ4K], ys: &[BlockQ8K]) -> f32 {
     debug_assert!(
-        n.is_multiple_of(QK_K),
+        n % QK_K == 0,
         "vec_dot_q4k_q8k: {n} is not divisible by {QK_K}"
     );
     let mut sumf = 0f32;
@@ -397,7 +397,7 @@ pub(crate) fn vec_dot_q4k_q8k(n: usize, xs: &[BlockQ4K], ys: &[BlockQ8K]) -> f32
 #[inline(always)]
 pub(crate) fn vec_dot_q3k_q8k(n: usize, xs: &[BlockQ3K], ys: &[BlockQ8K]) -> f32 {
     debug_assert!(
-        n.is_multiple_of(QK_K),
+        n % QK_K == 0,
         "vec_dot_q3k_q8k: {n} is not divisible by {QK_K}"
     );
     let mut sumf = 0f32;
@@ -521,7 +521,7 @@ pub(crate) fn vec_dot_q3k_q8k(n: usize, xs: &[BlockQ3K], ys: &[BlockQ8K]) -> f32
 #[inline(always)]
 pub(crate) fn vec_dot_q2k_q8k(n: usize, xs: &[BlockQ2K], ys: &[BlockQ8K]) -> f32 {
     debug_assert!(
-        n.is_multiple_of(QK_K),
+        n % QK_K == 0,
         "vec_dot_q2k_q8k: {n} is not divisible by {QK_K}"
     );
     let mut sumf = 0f32;
