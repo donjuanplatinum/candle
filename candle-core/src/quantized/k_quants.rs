@@ -165,7 +165,10 @@ impl GgmlType for BlockQ4_0 {
     fn to_float(xs: &[Self], ys: &mut [f32]) {
         let k = ys.len();
         let qk = Self::BLCK_SIZE;
-        debug_assert!(k % qk == 0, "dequantize_row_q4_0: {k} is not divisible by {qk}");
+        debug_assert!(
+            k % qk == 0,
+            "dequantize_row_q4_0: {k} is not divisible by {qk}"
+        );
 
         let nb = k / qk;
         for i in 0..nb {
@@ -235,7 +238,10 @@ impl GgmlType for BlockQ4_0 {
     }
 
     fn vec_dot_unopt(n: usize, xs: &[Self], ys: &[Self::VecDotType]) -> f32 {
-        debug_assert!(n % QK8_0 == 0, "vec_dot_q4_0_q8_0: {n} is not divisible by {QK8_0}");
+        debug_assert!(
+            n % QK8_0 == 0,
+            "vec_dot_q4_0_q8_0: {n} is not divisible by {QK8_0}"
+        );
         // Generic implementation.
         let mut sumf = 0f32;
         for (xs, ys) in xs.iter().zip(ys.iter()) {
@@ -263,8 +269,14 @@ impl GgmlType for BlockQ4_1 {
     fn vec_dot_unopt(n: usize, xs: &[Self], ys: &[Self::VecDotType]) -> f32 {
         // ggml_vec_dot_q4_1_q8_1
         let qk = QK8_1;
-        debug_assert!(n % qk == 0, "vec_dot_q4_1_q8_1: {n} is not divisible by {qk}");
-        debug_assert!((n / qk) % 2 == 0, "vec_dot_q4_1_q8_1: {n}, nb is not divisible by 2");
+        debug_assert!(
+            n % qk == 0,
+            "vec_dot_q4_1_q8_1: {n} is not divisible by {qk}"
+        );
+        debug_assert!(
+            (n / qk) % 2 == 0,
+            "vec_dot_q4_1_q8_1: {n}, nb is not divisible by 2"
+        );
 
         // Generic implementation.
         let mut sumf = 0f32;

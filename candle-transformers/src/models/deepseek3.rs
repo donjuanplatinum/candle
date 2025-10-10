@@ -2,13 +2,13 @@
 
 use std::{f32::consts::PI, sync::Arc};
 
+use crate::serde_default_fn;
 use candle::{
     shape::Dim, CpuStorage, CustomOp1, DType, Device, Error, IndexOp, Layout, Result, Shape,
     Tensor, WithDType, D,
 };
 use candle_nn::{embedding, rms_norm, Activation, Embedding, Linear, Module, RmsNorm, VarBuilder};
 use serde::Deserialize;
-use crate::serde_default_fn;
 
 struct NonZero {}
 

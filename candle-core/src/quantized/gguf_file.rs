@@ -89,12 +89,12 @@ pub struct Content {
 }
 
 fn read_string<R: std::io::Read>(reader: &mut R, magic: &VersionedMagic) -> Result<String> {
-        let len = match magic {
-            VersionedMagic::GgufV1 => reader.read_u32::<LittleEndian>()? as usize,
-            VersionedMagic::GgufV2 | VersionedMagic::GgufV3 => {
-                reader.read_u64::<LittleEndian>()? as usize
-            }
-        };
+    let len = match magic {
+        VersionedMagic::GgufV1 => reader.read_u32::<LittleEndian>()? as usize,
+        VersionedMagic::GgufV2 | VersionedMagic::GgufV3 => {
+            reader.read_u64::<LittleEndian>()? as usize
+        }
+    };
     let mut v = vec![0u8; len];
     reader.read_exact(&mut v)?;
     // GGUF strings are supposed to be non-null terminated but in practice this happens.
@@ -457,8 +457,7 @@ impl Content {
             Some(Value::I32(v)) if *v >= 0 => *v as u64,
             _ => DEFAULT_ALIGNMENT,
         };
-        let tensor_data_offset = (((position as u64 + alignment - 1) / alignment) * alignment)
-            as u64;
+        let tensor_data_offset = ((position + alignment - 1) / alignment) * alignment;
         Ok(Self {
             magic,
             metadata,
