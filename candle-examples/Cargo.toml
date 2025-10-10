@@ -161,3 +161,6 @@ required-features = ["symphonia"]
 [[example]]
 name = "bert_single_file_binary"
 required-features = ["bert-single-file-binary-builder"]
+
+[[example]]
+name = "deepseekv3"
